@@ -117,7 +117,7 @@ RazerGenie::RazerGenie(QWidget *parent) : QWidget(parent)
         }
 
         // Watch for dbus service changes (= daemon ends or gets started)
-        QDBusServiceWatcher *watcher = new QDBusServiceWatcher("org.razer", QDBusConnection::sessionBus());
+        QDBusServiceWatcher *watcher = new QDBusServiceWatcher("org.razer", QDBusConnection::systemBus());
 
         connect(watcher, &QDBusServiceWatcher::serviceRegistered,
                 this, &RazerGenie::dbusServiceRegistered);

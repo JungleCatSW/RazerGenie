@@ -143,7 +143,7 @@ void Device::setupCapabilities()
 bool isDaemonRunning()
 {
     QDBusMessage m = prepareGeneralQDBusMessage("razer.daemon", "version");
-    QDBusMessage msg = QDBusConnection::sessionBus().call(m);
+    QDBusMessage msg = QDBusConnection::systemBus().call(m);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         return true;
     } else {
@@ -185,7 +185,7 @@ bool syncEffects(bool yes)
     args.append(yes);
     m.setArguments(args);
 
-    bool queued = QDBusConnection::sessionBus().send(m);
+    bool queued = QDBusConnection::systemBus().send(m);
     qDebug() << "Queued: " << queued;
     return queued;
 }
@@ -315,7 +315,7 @@ Device::~Device()
  */
 bool connectDeviceAdded(QObject *receiver, const char *slot)
 {
-    return QDBusConnection::sessionBus().connect("org.razer", "/org/razer", "razer.devices", "device_added", receiver, slot);
+    return QDBusConnection::systemBus().connect("org.razer", "/org/razer", "razer.devices", "device_added", receiver, slot);
 }
 
 /**
@@ -324,7 +324,7 @@ bool connectDeviceAdded(QObject *receiver, const char *slot)
  */
 bool connectDeviceRemoved(QObject *receiver, const char *slot)
 {
-    return QDBusConnection::sessionBus().connect("org.razer", "/org/razer", "razer.devices", "device_removed", receiver, slot);
+    return QDBusConnection::systemBus().connect("org.razer", "/org/razer", "razer.devices", "device_removed", receiver, slot);
 }
 
 // ---- MISC METHODS ----
@@ -1227,7 +1227,7 @@ void printError(QDBusMessage& message, const char *functionname)
  */
 bool QDBusMessageToBool(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         // Everything went fine.
         return msg.arguments()[0].toBool();
@@ -1242,7 +1242,7 @@ bool QDBusMessageToBool(const QDBusMessage &message)
  */
 int QDBusMessageToInt(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         // Everything went fine.
         return msg.arguments()[0].toInt();
@@ -1257,7 +1257,7 @@ int QDBusMessageToInt(const QDBusMessage &message)
  */
 double QDBusMessageToDouble(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         // Everything went fine.
         return msg.arguments()[0].toDouble();
@@ -1272,7 +1272,7 @@ double QDBusMessageToDouble(const QDBusMessage &message)
  */
 QString QDBusMessageToString(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         // Everything went fine.
         return msg.arguments()[0].toString();
@@ -1287,7 +1287,7 @@ QString QDBusMessageToString(const QDBusMessage &message)
  */
 uchar QDBusMessageToByte(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         // Everything went fine.
         return msg.arguments()[0].value<uchar>();
@@ -1302,7 +1302,7 @@ uchar QDBusMessageToByte(const QDBusMessage &message)
  */
 QStringList QDBusMessageToStringList(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
         return msg.arguments()[0].toStringList();// VID / PID
     }
@@ -1317,7 +1317,7 @@ QStringList QDBusMessageToStringList(const QDBusMessage &message)
 QList<int> QDBusMessageToIntArray(const QDBusMessage &message)
 {
     QList<int> *retList = new QList<int>();
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     if(msg.type() == QDBusMessage::ReplyMessage) {
 //         qDebug() << "reply :" << msg; // sth like QDBusMessage(type=MethodReturn, service=":1.1482", signature="ai", contents=([Argument: ai {5426, 67}]) )
 //         qDebug() << "reply arguments : " << msg.arguments();
@@ -1342,7 +1342,7 @@ QList<int> QDBusMessageToIntArray(const QDBusMessage &message)
  */
 QDomDocument QDBusMessageToXML(const QDBusMessage &message)
 {
-    QDBusMessage msg = QDBusConnection::sessionBus().call(message);
+    QDBusMessage msg = QDBusConnection::systemBus().call(message);
     QDomDocument doc;
     if(msg.type() == QDBusMessage::ReplyMessage) {
         doc.setContent(msg.arguments()[0].toString());
@@ -1358,7 +1358,7 @@ QDomDocument QDBusMessageToXML(const QDBusMessage &message)
  */
 bool QDBusMessageToVoid(const QDBusMessage &message)
 {
-    return QDBusConnection::sessionBus().send(message);
+    return QDBusConnection::systemBus().send(message);
     // TODO: Handle error ?
 }
 }
