@@ -165,6 +165,7 @@ public:
     QString getDeviceType();
     QString getDriverVersion(); //FIXME
     QString getFirmwareVersion();
+    QString getKeyboardLayout();
     QVariantHash getRazerUrls();
     // VID / PID
     int getVid();
